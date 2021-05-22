@@ -12,7 +12,7 @@ public class Main {
             frame.getContentPane().add(new GameView());
             frame.setResizable(true);
             frame.setVisible(true);
-            frame.setSize(200, 200);
+            frame.setSize(1600, 900);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         });
     }

@@ -35,6 +35,10 @@ public class Vector2 {
         return new Vector2(this.x / mag, this.y / mag);
     }
 
+    public Vector2 copy() {
+      return new Vector2(this.x, this.y);
+    }
+
     public Vector2 add(double x, double y) {
         this.x += x;
         this.y += y;
@@ -81,5 +85,9 @@ public class Vector2 {
         this.x /= other.x;
         this.y /= other.y;
         return this;
+    }
+
+    public String toString() {
+      return "[" + x + ", " + y + "]";
     }
 }

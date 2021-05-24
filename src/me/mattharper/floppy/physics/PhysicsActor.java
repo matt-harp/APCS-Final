@@ -12,12 +12,14 @@ public abstract class PhysicsActor {
     protected boolean hasGravity = true;
 
     public void update() {
-        position = position.add(velocity.multiply(Time.deltaSeconds));
+        position.add(velocity.copy().multiply(Time.deltaSeconds));
+        if(position.y < 0)
+          velocity.multiply(new Vector2(1, -1));
     }
 
     public void applyForce(Vector2 force) {
         Vector2 delta = force.divide(mass).multiply(Time.deltaSeconds);
-        velocity = velocity.add(delta);
+        velocity.add(delta);
     }
 
     public boolean hasGravity() {
@@ -29,4 +31,8 @@ public abstract class PhysicsActor {
     }
 
     public abstract void render(Graphics2D g);
+
+    public String toString() {
+      return "[Actor of mass " + mass + " at " + position + "]";
+    }
 }

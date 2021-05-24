@@ -3,6 +3,7 @@ package me.mattharper.floppy.game;
 import me.mattharper.floppy.physics.Ball;
 import me.mattharper.floppy.physics.PhysicsActor;
 import me.mattharper.floppy.util.Vector2;
+import me.mattharper.floppy.util.Time;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,17 +14,14 @@ public class World {
     private static Vector2 gravity = new Vector2(0, -10);
 
     public static void init() {
-        spawn(new Ball(new Vector2(0, 0)));
-        spawn(new Ball(new Vector2(10, 10)));
-        spawn(new Ball(new Vector2(20, 20)));
-        spawn(new Ball(new Vector2(30, 30)));
-        spawn(new Ball(new Vector2(40, 40)));
+        spawn(new Ball(new Vector2(5, 25)));
+        System.out.println("World initialized");
     }
 
     public static void updatePhysics() {
         for(PhysicsActor actor : actors) {
             if(actor.hasGravity()) {
-                actor.applyForce(gravity.multiply(actor.getMass()));
+                actor.applyForce(gravity.copy().multiply(actor.getMass()));
             }
             actor.update();
         }

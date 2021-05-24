@@ -15,14 +15,14 @@ public class GameView extends JPanel {
     public GameView() {
         instance = this;
         setDoubleBuffered(true);
+        //setup world view
         World.init();
-        Timer gameLoop = new Timer(2, e -> {
+        Timer gameLoop = new Timer(8, e -> {
             Time.deltaSeconds = (System.currentTimeMillis() - lastFrameTime) / 1000D;
             World.update();
             repaint();
             lastFrameTime = System.currentTimeMillis();
         });
-        //setup world view
         gameLoop.start();
     }
 

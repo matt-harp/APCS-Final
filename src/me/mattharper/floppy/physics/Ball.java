@@ -11,7 +11,7 @@ public class Ball extends PhysicsActor {
 
     public Ball(Vector2 position) {
          this.position = position;
-         this.hasGravity = false;
+         this.hasGravity = true;
     }
 
     @Override
@@ -19,5 +19,6 @@ public class Ball extends PhysicsActor {
         //todo dont make actors responsible for world to screen
         Vector2 worldPos = GameView.worldToScreen(position);
         g.drawOval((int)worldPos.x - (15/2), (int)worldPos.y - (15/2), 15, 15);
+        g.drawString(velocity.toString(), (int)worldPos.x, (int)worldPos.y);
     }
 }

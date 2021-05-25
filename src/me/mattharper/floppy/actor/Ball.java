@@ -1,4 +1,4 @@
-package me.mattharper.floppy.physics;
+package me.mattharper.floppy.actor;
 
 import me.mattharper.floppy.game.GameView;
 import me.mattharper.floppy.util.Vector2;

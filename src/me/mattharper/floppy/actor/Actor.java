@@ -11,6 +11,10 @@ public abstract class Actor {
 
     public abstract void render(Graphics2D g);
 
+    public Vector2 getPosition() {
+      return position;
+    }
+
     public String toString() {
         return "[Actor at " + position + "]";
     }

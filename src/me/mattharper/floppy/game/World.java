@@ -3,6 +3,7 @@ package me.mattharper.floppy.game;
 import me.mattharper.floppy.actor.Actor;
 import me.mattharper.floppy.actor.Ball;
 import me.mattharper.floppy.actor.PhysicsActor;
+import me.mattharper.floppy.physics.CollisionResult;
 import me.mattharper.floppy.util.Vector2;
 
 import java.awt.*;
@@ -18,6 +19,19 @@ public class World {
         System.out.println("World initialized");
     }
 
+    public static void spawn(Actor actor) {
+        actors.add(actor);
+    }
+
+    public static boolean destroy(Actor actor) {
+        return actors.remove(actor);
+    }
+
+    public static void update() {
+        updatePhysics();
+        resolveCollisions();
+    }
+
     public static void updatePhysics() {
         for(Actor actor : actors) {
             if(actor instanceof PhysicsActor) {
@@ -29,15 +43,29 @@ public class World {
             actor.update();
         }
     }
-    public static void spawn(Actor actor) {
-        actors.add(actor);
-    }
-    public static boolean destroy(Actor actor) {
-        return actors.remove(actor);
+
+    public static void resolveCollisions() {
+      for(PhysicsActor actor : getPhysicsActors()) {
+        //todo if(!actor.collides()) continue;
+        //todo broad phase bounding checks
+        for(PhysicsActor other : getPhysicsActors()) {
+          if(actor == other) continue;
+          //todo if(!other.collides()) continue;
+          CollisionResult result = actor.getCollision().testCollision(other.getCollision(), other.getPosition());
+          if(result.collision) {
+            actor.onCollision(collision);
+          }
+        }
+      }
     }
 
-    public static void update() {
-        updatePhysics();
+    private static List<PhysicsActor> getPhysicsActors() {
+      List<PhysicsActor> result = new ArrayList<>();
+      for(Actor actor : actors) {
+        if(actor instanceof PhysicsActor)
+          result.add((PhysicsActor)actor);
+      }
+      return result;
     }
 
     public static void render(Graphics2D g) {

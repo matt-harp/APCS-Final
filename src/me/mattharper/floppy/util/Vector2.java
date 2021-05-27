@@ -22,14 +22,6 @@ public class Vector2 {
         return Math.sqrt(x * x + y * y);
     }
 
-    public double angle(Vector2 other) {
-        return 0;
-    }
-
-    public double dotProduct(Vector2 other) {
-        return 0;
-    }
-
     public Vector2 normalized() {
         double mag = magnitude();
         return new Vector2(this.x / mag, this.y / mag);

@@ -14,14 +14,12 @@ public abstract class PhysicsActor extends Actor {
     protected boolean hasGravity = true;
     protected boolean isKinematic = true;
     // respective to the position of the actor
-    protected AABB boundingBox;
+    protected CollisionShape collision;
 
     @Override
     public void update() {
         if(isKinematic)
             position.add(velocity.copy().multiply(Time.deltaSeconds));
-        if(position.y < 0)
-            applyForceInstant(velocity.copy().multiply(-2*mass));
     }
 
     public void applyForce(Vector2 force) {
@@ -34,12 +32,18 @@ public abstract class PhysicsActor extends Actor {
         velocity.add(delta);
     }
 
+    public abstract void onCollision(CollisionResult collision);
+
     public boolean hasGravity() {
         return hasGravity;
     }
 
     public double getMass() {
         return mass;
+    }
+
+    public CollisionShape getCollision() {
+      return collision;
     }
 
     public String toString() {

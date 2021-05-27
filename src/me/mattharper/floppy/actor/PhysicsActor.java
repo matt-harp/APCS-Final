@@ -1,6 +1,5 @@
 package me.mattharper.floppy.actor;
 
-import me.mattharper.floppy.physics.AABB;
 import me.mattharper.floppy.util.Time;
 import me.mattharper.floppy.util.Vector2;
 

@@ -16,6 +16,7 @@ public class World {
 
     public static void init() {
         spawn(new Ball(new Vector2(5, 25)));
+        spawn(new Box(new Vector2(5, 5), new Vector2(-1, -1), new Vector2(1, 1)));
         System.out.println("World initialized");
     }
 
@@ -51,7 +52,7 @@ public class World {
         for(PhysicsActor other : getPhysicsActors()) {
           if(actor == other) continue;
           //todo if(!other.collides()) continue;
-          CollisionResult result = actor.getCollision().testCollision(other.getCollision(), other.getPosition());
+          CollisionResult result = actor.getCollision().testCollision(other.getCollision(), other.getPosition().copy().minus(actor.getPosition()));
           if(result.collision) {
             actor.onCollision(collision);
           }

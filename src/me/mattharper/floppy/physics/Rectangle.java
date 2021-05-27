@@ -11,17 +11,21 @@ public class Rectangle implements CollisionShape {
     this.max = max;
   }
 
-  public CollisionResult testCollision(CollisionShape other) {
+  public CollisionResult testCollision(CollisionShape other, Vector2 relativeTo) {
     if(other instanceof Rectangle) {
-      return testRect((Rectangle)other);
+      return testRect((Rectangle)other, relativeTo);
     }
     //todo
-    return false;
+    return new CollisionResult();
   }
 
-  private CollisionResult testRect(Rectangle other) {
+  private CollisionResult testRect(Rectangle other, Vector2 relativeTo) {
     CollisionResult result = new CollisionResult();
-    if()
+    Vector2 otherMin = relativeTo.copy().add(other.min.x, other.min.y);
+    Vector2 otherMax = relativeTo.copy().add(other.max.x, other.max.y);
+    if(min.x < otherMax.x && max.x > otherMin.x && max.y > otherMin.y && min.y < otherMax.y) {
+      result.collision = true;
+    }
     return result;
   }
 

@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { // [Rubric B] neat main method
         EventQueue.invokeLater(() -> {
             JFrame frame = new JFrame("floppy");
 

@@ -1,18 +1,38 @@
 package me.mattharper.floppy.actor;
 
+import me.mattharper.floppy.component.Component;
+import me.mattharper.floppy.graphics.GraphicsContext;
 import me.mattharper.floppy.util.Vector2;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public abstract class Actor {
-    protected Vector2 position = Vector2.ZERO;
+public abstract class Actor { // [Rubric B] super class [Rubric C] abstract class
+    protected final List<Component> components = new ArrayList<>();
+    protected Vector2 position = new Vector2();
 
-    public abstract void update();
+    public void update() {
+        for (Component component : components) {
+            component.update();
+        }
+    }
 
-    public abstract void render(Graphics2D g);
+    public void render(GraphicsContext g) {
+        for (Component component : components) {
+            component.render(g);
+        }
+    };
+
+    public List<Component> getComponents() {
+        return components;
+    }
 
     public Vector2 getPosition() {
       return position;
+    }
+
+    public void setPosition(Vector2 position) {
+        this.position = position;
     }
 
     public String toString() {

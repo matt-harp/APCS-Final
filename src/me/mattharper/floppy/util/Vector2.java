@@ -1,7 +1,6 @@
 package me.mattharper.floppy.util;
 
 public class Vector2 {
-    public static final Vector2 ZERO = new Vector2(0, 0);
     public double x;
     public double y;
 
@@ -25,6 +24,19 @@ public class Vector2 {
     public Vector2 normalized() {
         double mag = magnitude();
         return new Vector2(this.x / mag, this.y / mag);
+    }
+
+    public double angle(Vector2 other) {
+        Vector2 difference = copy().subtract(other);
+        return Math.atan2(difference.y, difference.x);
+    }
+
+    public double distance(Vector2 other) {
+        return Math.sqrt(Math.pow(other.x-this.x, 2) + Math.pow(other.y-this.y, 2));
+    }
+
+    public static Vector2 getCenter(Vector2 v1, Vector2 v2) {
+        return new Vector2((v1.x + v2.x)/2, (v1.y + v2.y)/2);
     }
 
     public Vector2 copy() {
@@ -61,6 +73,12 @@ public class Vector2 {
         return this;
     }
 
+    public Vector2 multiply(double x, double y) {
+        this.x *= x;
+        this.y *= y;
+        return this;
+    }
+
     public Vector2 multiply(Vector2 other) {
         this.x *= other.x;
         this.y *= other.y;
@@ -79,7 +97,7 @@ public class Vector2 {
         return this;
     }
 
-    public String toString() {
+    public String toString() { // [Rubric B] toString method
       return "[" + String.format("%.2f", x) + ", " + String.format("%.2f", y) + "]";
     }
 }

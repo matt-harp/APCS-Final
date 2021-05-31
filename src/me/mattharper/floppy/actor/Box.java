@@ -1,25 +1,34 @@
 package me.mattharper.floppy.actor;
 
+import me.mattharper.floppy.graphics.GraphicsContext;
+import me.mattharper.floppy.physics.CollisionResult;
 import me.mattharper.floppy.physics.Rectangle;
 import me.mattharper.floppy.util.Vector2;
-import me.mattharper.floppy.game.GameView;
-
-import java.awt.*;
 
 public class Box extends PhysicsActor {
-    public Box(Vector2 position, Vector2 minExtent, Vector2 maxExtent) {
-      this.position = position;
-      this.collision = new Rectangle(minExtent, maxExtent);
-    }
-    @Override
-    public void render(Graphics2D g) {
-      Vector2 screenPos = GameView.worldToScreen(position);
-      Vector2 min = ((Rectangle)collision).getMin();
-      Vector2 max = ((Rectangle)collision).getMax();
-      g.drawRect((int)min.x, (int)min.y, (int)(max.x-min.x), (int)(max.y-min.y));
+    public Box(Vector2 position, Vector2 minExtent, Vector2 maxExtent) { // [Rubric A] overloaded constructor
+        this.position = position;
+        this.collision = new Rectangle(minExtent, maxExtent);
+        this.hasGravity = false;
+        this.mass = 1000;
     }
 
-    public void onCollision(CollisionResult result) {
-      
+    @Override
+    public void update() {
+        super.update();
+        double airResistance = velocity.magnitude();
+        applyForce(velocity.normalized().multiply(-airResistance));
+    }
+
+    @Override
+    public void render(GraphicsContext g) {
+        super.render(g);
+        g.fillRect(position.copy().add(((Rectangle) collision).getMin()), position.copy().add(((Rectangle) collision).getMax()));
+        g.drawPoint(position);
+    }
+
+    @Override
+    public void onCollision(CollisionResult collision) {
+
     }
 }

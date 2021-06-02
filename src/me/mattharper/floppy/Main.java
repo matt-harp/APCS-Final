@@ -11,7 +11,8 @@ public class Main {
         EventQueue.invokeLater(() -> {
             JFrame frame = new JFrame("floppy");
 
-            frame.getContentPane().add(new GameView());
+            GameView gameView = new GameView();
+            frame.getContentPane().add(gameView);
             frame.setResizable(true);
             frame.setVisible(true);
             frame.setSize(400, 400);

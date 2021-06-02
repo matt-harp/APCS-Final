@@ -11,31 +11,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class World {
-    private static final List<Actor> actors = new ArrayList<>(); // [Rubric A] ArrayList, [Rubric A] static array
-    private static Vector2 gravity = new Vector2(0, -9.81);
+    private final List<Actor> actors = new ArrayList<>(); // [Rubric A] ArrayList
+    private Vector2 gravity = new Vector2(0, -9.81);
 
-    public static void init() {
-        spawn(new Pointer());
-        spawn(new CameraController());
-        spawn(new Box(new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
-        spawn(new BouncyBox(new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
+    public void init() {
+        spawn(new Pointer(this));
+        spawn(new CameraController(this));
+        spawn(new DebugLog(this));
+        spawn(new Box(this, new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
+        spawn(new BouncyBox(this, new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
+
+        for (Actor actor : actors) {
+            actor.init();
+        }
         System.out.println("World initialized");
     }
 
-    public static void spawn(Actor actor) {
+    public void spawn(Actor actor) {
         actors.add(actor); // [Rubric A] add method (ArrayList)
     }
 
-    public static boolean destroy(Actor actor) {
+    public boolean destroy(Actor actor) {
         return actors.remove(actor); // [Rubric A] remove method (ArrayList)
     }
 
-    public static void update() {
+    public void update() {
         updatePhysics();
         resolveCollisions();
     }
 
-    public static void updatePhysics() {
+    public void updatePhysics() {
         for (Actor actor : actors) { // [Rubric B] enhanced for loop
             if (actor instanceof PhysicsActor) {
                 PhysicsActor physicsActor = (PhysicsActor) actor;
@@ -47,7 +52,7 @@ public class World {
         }
     }
 
-    public static void resolveCollisions() {
+    public void resolveCollisions() {
         List<Pair<PhysicsActor, PhysicsActor>> already = new ArrayList<>();
         for (PhysicsActor actor : getPhysicsActors()) {
             //todo if(!actor.collides()) continue;
@@ -69,7 +74,7 @@ public class World {
         }
     }
 
-    private static List<PhysicsActor> getPhysicsActors() { // [Rubric B] helper method
+    private List<PhysicsActor> getPhysicsActors() { // [Rubric B] helper method
         List<PhysicsActor> result = new ArrayList<>();
         for (Actor actor : actors) {
             if (actor instanceof PhysicsActor)
@@ -78,7 +83,7 @@ public class World {
         return result;
     }
 
-    public static void render(GraphicsContext g) {
+    public void render(GraphicsContext g) {
         //render actors
         for (Actor actor : actors) {
             actor.render(g);

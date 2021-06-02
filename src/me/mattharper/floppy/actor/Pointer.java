@@ -1,6 +1,7 @@
 package me.mattharper.floppy.actor;
 
 import me.mattharper.floppy.game.GameView;
+import me.mattharper.floppy.game.World;
 import me.mattharper.floppy.graphics.GraphicsContext;
 import me.mattharper.floppy.input.Input;
 import me.mattharper.floppy.input.InputBind;
@@ -12,7 +13,8 @@ import java.awt.*;
 
 public class Pointer extends PhysicsActor {
     private PhysicsActor draggedActor;
-    public Pointer() {
+    public Pointer(World world) {
+        super(world);
         this.hasGravity = false;
         this.isKinematic = false;
         collision = new Point();

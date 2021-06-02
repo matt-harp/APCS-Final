@@ -1,5 +1,6 @@
 package me.mattharper.floppy.actor;
 
+import me.mattharper.floppy.game.World;
 import me.mattharper.floppy.physics.CollisionResult;
 import me.mattharper.floppy.physics.CollisionShape;
 import me.mattharper.floppy.util.Time;
@@ -12,6 +13,10 @@ public abstract class PhysicsActor extends Actor {
     protected boolean hasGravity = true; // [Rubric A] boolean variable
     protected boolean isKinematic = true;
     protected CollisionShape collision; //todo component
+
+    public PhysicsActor(World world) {
+        super(world);
+    }
 
     @Override
     public void update() {

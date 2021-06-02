@@ -11,13 +11,13 @@ public class BouncyBox extends Box { // [Rubric C] multi-level inheritance
     SpringConstraint constraint;
     PositionTracer tracer;
 
-    public BouncyBox(Vector2 position, Vector2 min, Vector2 max) {
-        super(position, min, max); // [Rubric B] super keyword
+    public BouncyBox(World world, Vector2 position, Vector2 min, Vector2 max) {
+        super(world, position, min, max); // [Rubric B] super keyword
         this.hasGravity = true;
         this.mass = 10;
         this.velocity = new Vector2(0, -10);
-        Box anchor = new Box(position.copy().add(0, 10), min, max);
-        World.spawn(anchor);
+        Box anchor = new Box(world, position.copy().add(0, 10), min, max);
+        world.spawn(anchor);
         constraint = new SpringConstraint(anchor, this);
         tracer = new PositionTracer(this, 250);
     }

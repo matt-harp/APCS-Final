@@ -17,18 +17,27 @@ public class GameView extends JPanel {
     // pixels per meter
     public static int PX_SCALE = 5;
     private long lastFrameTime = System.currentTimeMillis();
-    private Vector2 cameraOffset = new Vector2();
-    private Input input;
+    private final Vector2 cameraOffset = new Vector2();
+    private final Input input;
+    private World currentWorld;
     public static List<FrameListener> endOfFrame = new LinkedList<>();
     public GameView() {
         instance = this;
         setDoubleBuffered(true);
+
+        input = new Input();
+        addMouseListener(input);
+        addMouseMotionListener(input);
+        addMouseWheelListener(input);
+        input.setupKeybindings(this);
+
         //setup world view
-        World.init();
+        currentWorld = new World();
+        currentWorld.init();
         Timer gameLoop = new Timer(8, e -> {
             Time.deltaSeconds = (System.currentTimeMillis() - lastFrameTime) / 1000D;
             Time.deltaSeconds *= Time.TIME_SCALE;
-            World.update();
+            currentWorld.update();
             repaint();
             lastFrameTime = System.currentTimeMillis();
             for(FrameListener listener : endOfFrame) {
@@ -36,11 +45,6 @@ public class GameView extends JPanel {
             }
             endOfFrame.clear();
         });
-        input = new Input();
-        addMouseListener(input);
-        addMouseMotionListener(input);
-        addMouseWheelListener(input);
-        addKeyListener(input);
         gameLoop.start();
 
         BufferedImage image = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
@@ -54,7 +58,7 @@ public class GameView extends JPanel {
         GraphicsContext context = new GraphicsContext(g);
         g.drawString("DeltaSeconds: " + Time.deltaSeconds, 10, 10);
         g.drawString("FPS: " + (int)(1 / Time.deltaSeconds), 10, 40);
-        World.render(context);
+        currentWorld.render(context);
     }
 
     public static GameView getInstance() {

@@ -1,6 +1,7 @@
 package me.mattharper.floppy.actor;
 
 import me.mattharper.floppy.game.GameView;
+import me.mattharper.floppy.game.World;
 import me.mattharper.floppy.graphics.GraphicsContext;
 import me.mattharper.floppy.input.Input;
 import me.mattharper.floppy.input.InputAxis;
@@ -9,6 +10,15 @@ import me.mattharper.floppy.util.Vector2;
 
 public class CameraController extends Actor {
     private static final float SENSITIVITY = 3f;
+
+    public CameraController(World world) {
+        super(world);
+    }
+
+    @Override
+    public void init() {
+        super.init();
+    }
 
     @Override
     public void update() {
@@ -33,6 +43,12 @@ public class CameraController extends Actor {
             double dx = after.x - before.x;
             double dy = after.y - before.y;
             GameView.getInstance().getCameraOffset().add(-dx, -dy);
+        }
+        if(Input.isInputHeld(InputBind.CAMERA_LEFT)) {
+            GameView.getInstance().getCameraOffset().add(-1, 0);
+        }
+        if(Input.isInputHeld(InputBind.CAMERA_RIGHT)) {
+            GameView.getInstance().getCameraOffset().add(1, 0);
         }
     }
 

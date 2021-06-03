@@ -56,6 +56,5 @@ public class CameraController extends Actor {
     public void render(GraphicsContext g) {
         g.drawString(new Vector2(Input.mouseX, Input.mouseY).toString(), new Vector2(10, 70));
         g.drawString(GameView.screenToWorld(new Vector2(Input.mouseX, Input.mouseY)).toString(), new Vector2(10, 85));
-        g.drawString("SCALE: " + GameView.PX_SCALE, new Vector2(10, 100));
     }
 }

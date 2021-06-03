@@ -60,7 +60,11 @@ public class GraphicsContext {
     public void fillRect(Vector2 min, Vector2 max) {
         Vector2 minScreen = GameView.worldToScreen(min);
         Vector2 maxScreen = GameView.worldToScreen(max);
-        g2d.fillRect((int)minScreen.x, (int)minScreen.y, (int)(maxScreen.x-minScreen.x), (int)(maxScreen.y-minScreen.y));
+        int minX = (int) Math.min(minScreen.x, maxScreen.x);
+        int minY = (int) Math.min(minScreen.y, maxScreen.y);
+        int maxX = (int) Math.max(minScreen.x, maxScreen.x);
+        int maxY = (int) Math.max(minScreen.y, maxScreen.y);
+        g2d.fillRect(minX, minY, maxX-minX, maxY-minY);
     }
 
     public void drawLine(Vector2 position1, Vector2 position2) {

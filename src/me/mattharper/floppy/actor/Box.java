@@ -12,6 +12,7 @@ public class Box extends PhysicsActor {
         this.position = position;
         this.collision = new Rectangle(minExtent, maxExtent);
         this.hasGravity = false;
+        this.isKinematic = false;
         this.mass = 1000;
     }
 

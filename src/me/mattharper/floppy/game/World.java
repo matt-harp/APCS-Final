@@ -1,6 +1,5 @@
 package me.mattharper.floppy.game;
 
-import javafx.util.Pair;
 import me.mattharper.floppy.actor.*;
 import me.mattharper.floppy.graphics.GraphicsContext;
 import me.mattharper.floppy.physics.CollisionResult;
@@ -9,6 +8,8 @@ import me.mattharper.floppy.util.Vector2;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.AbstractMap;
 
 public class World {
     private final List<Actor> actors = new ArrayList<>(); // [Rubric A] ArrayList
@@ -53,7 +54,7 @@ public class World {
     }
 
     public void resolveCollisions() {
-        List<Pair<PhysicsActor, PhysicsActor>> already = new ArrayList<>();
+        List<Map.Entry<PhysicsActor, PhysicsActor>> already = new ArrayList<>();
         for (PhysicsActor actor : getPhysicsActors()) {
             //todo if(!actor.collides()) continue;
             //todo broad phase bounding checks
@@ -68,7 +69,7 @@ public class World {
                     actor.onCollision(result);
                     result.otherActor = actor; //todo hack
                     other.onCollision(result);
-                    already.add(new Pair<>(actor, other));
+                    already.add(new AbstractMap.SimpleEntry<>(actor, other));
                 }
             }
         }

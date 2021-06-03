@@ -14,8 +14,8 @@ public class BouncyBox extends Box { // [Rubric C] multi-level inheritance
     public BouncyBox(World world, Vector2 position, Vector2 min, Vector2 max) {
         super(world, position, min, max); // [Rubric B] super keyword
         this.hasGravity = true;
+        this.isKinematic = true;
         this.mass = 10;
-        this.velocity = new Vector2(0, -10);
         Box anchor = new Box(world, position.copy().add(0, 10), min, max);
         world.spawn(anchor);
         constraint = new SpringConstraint(anchor, this);

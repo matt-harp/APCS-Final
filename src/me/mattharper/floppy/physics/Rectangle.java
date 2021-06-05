@@ -31,12 +31,12 @@ public class Rectangle implements CollisionShape {
             double yOverlap = Math.min(max.y, otherMax.y) - Math.max(min.y, otherMin.y);
             Vector2 center = Vector2.getCenter(otherMin, otherMax);
             if(xOverlap > yOverlap) {
-                if(center.y > 0) result.direction = new Vector2(0, 1);
-                else result.direction = new Vector2(0, -1);
+                if(center.y > 0) result.normal = new Vector2(0, 1);
+                else result.normal = new Vector2(0, -1);
             }
             else {
-                if(center.x > 0) result.direction = new Vector2(1, 0);
-                else result.direction = new Vector2(-1, 0);
+                if(center.x > 0) result.normal = new Vector2(1, 0);
+                else result.normal = new Vector2(-1, 0);
             }
             result.collision = true;
             result.penetration = new Vector2(xOverlap, yOverlap);
@@ -49,7 +49,7 @@ public class Rectangle implements CollisionShape {
         Vector2 point = relativeTo.copy().add(other.getOffset());
         if (point.x > min.x && point.x < max.x && point.y > min.y && point.y < max.y) {
             result.collision = true;
-            result.direction = point.normalized();
+            result.normal = point.normalized();
         }
         return result;
     }

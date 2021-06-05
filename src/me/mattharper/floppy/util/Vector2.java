@@ -5,7 +5,7 @@ public class Vector2 {
     public double y;
 
     public Vector2() {
-        this.x = this.y = 0.f;
+        this.x = this.y = 0f;
     }
 
     public Vector2(double x, double y) {
@@ -27,8 +27,13 @@ public class Vector2 {
     }
 
     public double angle(Vector2 other) {
-        Vector2 difference = copy().subtract(other);
-        return Math.atan2(difference.y, difference.x);
+        return Math.acos(dotProduct(other));
+    }
+
+    public double dotProduct(Vector2 other) {
+        Vector2 v1 = normalized();
+        Vector2 v2 = other.normalized();
+        return (v1.x * v2.x) + (v1.y * v2.y);
     }
 
     public double distance(Vector2 other) {
@@ -41,6 +46,10 @@ public class Vector2 {
 
     public Vector2 copy() {
       return new Vector2(this.x, this.y);
+    }
+
+    public Vector2 abs() {
+        return new Vector2(Math.abs(this.x), Math.abs(this.y));
     }
 
     public Vector2 add(double x, double y) {

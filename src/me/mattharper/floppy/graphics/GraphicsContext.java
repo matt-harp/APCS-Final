@@ -21,7 +21,7 @@ public class GraphicsContext {
 
     public void drawPoint(Vector2 worldPos) {
         Vector2 screen = GameView.worldToScreen(worldPos);
-        g2d.fillOval((int)screen.x, (int)screen.y, 3, 3);
+        g2d.fillOval((int)screen.x, (int)screen.y, 5, 5);
     }
 
     public void drawPointScreen(Vector2 position) {

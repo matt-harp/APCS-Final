@@ -1,6 +1,5 @@
 package me.mattharper.floppy.actor;
 
-import me.mattharper.floppy.component.PositionTracer;
 import me.mattharper.floppy.game.World;
 import me.mattharper.floppy.graphics.GraphicsContext;
 import me.mattharper.floppy.physics.CollisionResult;
@@ -9,17 +8,13 @@ import me.mattharper.floppy.util.Vector2;
 
 public class BouncyBox extends Box { // [Rubric C] multi-level inheritance
     SpringConstraint constraint;
-    PositionTracer tracer;
 
     public BouncyBox(World world, Vector2 position, Vector2 min, Vector2 max) {
         super(world, position, min, max); // [Rubric B] super keyword
         this.hasGravity = true;
         this.isKinematic = true;
         this.mass = 10;
-        Box anchor = new Box(world, position.copy().add(0, 10), min, max);
-        world.spawn(anchor);
-        constraint = new SpringConstraint(anchor, this);
-        tracer = new PositionTracer(this, 250);
+        this.restitution = 0.94f;
     }
 
     @Override
@@ -30,13 +25,23 @@ public class BouncyBox extends Box { // [Rubric C] multi-level inheritance
     @Override
     public void render(GraphicsContext g) {
         super.render(g);
-        g.drawLine(position, constraint.getOwner().getPosition());
     }
 
     @Override
     public void onCollision(CollisionResult result) {
         if(result.otherActor instanceof Pointer) return;
-        position.add(result.direction.copy().multiply(result.penetration));
-        this.applyForceInstant(result.direction.multiply(1));
+        velocity.multiply(1-friction);
+//        float e = Math.min(restitution, result.otherActor.restitution);
+//
+//        Vector2 impulse = result.normal.copy().multiply(velocity.abs().add(velocity.abs().multiply(e))).multiply(mass);
+//        applyImpulse(impulse);
+//
+//        float mu = Math.max(friction, result.otherActor.friction);
+//        Vector2 friction = velocity.copy().multiply((impulse.magnitude() / Time.deltaSeconds ) * -mu);
+//
+//        applyForce(friction);
+
+
+//        position.add(result.normal.copy().multiply(result.penetration));
     }
 }

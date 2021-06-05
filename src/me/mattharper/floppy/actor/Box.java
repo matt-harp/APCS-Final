@@ -14,13 +14,12 @@ public class Box extends PhysicsActor {
         this.hasGravity = false;
         this.isKinematic = false;
         this.mass = 1000;
+        this.restitution = 0.1f;
     }
 
     @Override
     public void update() {
         super.update();
-        double airResistance = velocity.magnitude();
-        applyForce(velocity.normalized().multiply(-airResistance));
     }
 
     @Override

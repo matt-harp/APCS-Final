@@ -50,6 +50,12 @@ public class CameraController extends Actor {
         if(Input.isInputHeld(InputBind.CAMERA_RIGHT)) {
             GameView.getInstance().getCameraOffset().add(1, 0);
         }
+        if(Input.isInputHeld(InputBind.CAMERA_UP)) {
+            GameView.getInstance().getCameraOffset().add(0, 1);
+        }
+        if(Input.isInputHeld(InputBind.CAMERA_DOWN)) {
+            GameView.getInstance().getCameraOffset().add(0, -1);
+        }
     }
 
     @Override

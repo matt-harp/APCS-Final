@@ -13,13 +13,15 @@ import java.util.AbstractMap;
 
 public class World {
     private final List<Actor> actors = new ArrayList<>(); // [Rubric A] ArrayList
-    private Vector2 gravity = new Vector2(0, -9.81);
+    public final Vector2 gravity = new Vector2(0, -9.81);
 
     public void init() {
         spawn(new Pointer(this));
         spawn(new CameraController(this));
         spawn(new DebugLog(this));
-        spawn(new Box(this, new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
+        spawn(new Box(this, new Vector2(0, 20), new Vector2(-3, -3), new Vector2(3, 3)));
+        spawn(new Box(this, new Vector2(0, -10), new Vector2(-300, -300), new Vector2(300, 0)));
+        spawn(new BouncyBox(this, new Vector2(0, 10), new Vector2(-3, -3), new Vector2(3, 3)));
         spawn(new BouncyBox(this, new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
 
         for (Actor actor : actors) {
@@ -65,6 +67,7 @@ public class World {
                 if (!actor.canCollideWith(other)) continue;
                 CollisionResult result = actor.getCollision().testCollision(other.getCollision(), other.getPosition().copy().subtract(actor.getPosition()));
                 if (result.collision) {
+                    resolveCollision(actor, other, result);
                     result.otherActor = other;
                     actor.onCollision(result);
                     result.otherActor = actor; //todo hack
@@ -73,6 +76,24 @@ public class World {
                 }
             }
         }
+    }
+
+    private void resolveCollision(PhysicsActor a, PhysicsActor b, CollisionResult result) {
+        Vector2 rv = b.getVelocity().copy().subtract(a.getVelocity());
+        double normalVelocity = rv.dotProduct(result.normal);
+        if(normalVelocity > 0) return;
+        float e = Math.min(a.restitution, b.restitution);
+        double j = -(1+e) * normalVelocity;
+        j /= (1/a.getMass()) + (1/b.getMass());
+        Vector2 impulse = result.normal.copy().multiply(j*2);
+        b.applyImpulse(impulse);
+        impulse.multiply(-1);
+        a.applyImpulse(impulse);
+
+        // correct interpenetration of objects
+        if(b.isKinematic)
+            b.getPosition().add(result.normal.copy().multiply(result.penetration));
+
     }
 
     private List<PhysicsActor> getPhysicsActors() { // [Rubric B] helper method

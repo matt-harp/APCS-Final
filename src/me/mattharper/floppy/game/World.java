@@ -85,7 +85,8 @@ public class World {
         float e = Math.min(a.restitution, b.restitution);
         double j = -(1+e) * normalVelocity;
         j /= (1/a.getMass()) + (1/b.getMass());
-        Vector2 impulse = result.normal.copy().multiply(j*2);
+//        Vector2 impulse = result.normal.copy().multiply(j*2);
+        Vector2 impulse = result.normal.copy().multiply(a.getMass() * a.getVelocity().magnitude());
         b.applyImpulse(impulse);
         impulse.multiply(-1);
         a.applyImpulse(impulse);

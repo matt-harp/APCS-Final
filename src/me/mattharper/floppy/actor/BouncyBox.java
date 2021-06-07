@@ -6,6 +6,8 @@ import me.mattharper.floppy.physics.CollisionResult;
 import me.mattharper.floppy.physics.SpringConstraint;
 import me.mattharper.floppy.util.Vector2;
 
+import java.awt.Color;
+
 public class BouncyBox extends Box { // [Rubric C] multi-level inheritance
     SpringConstraint constraint;
 
@@ -24,6 +26,7 @@ public class BouncyBox extends Box { // [Rubric C] multi-level inheritance
 
     @Override
     public void render(GraphicsContext g) {
+        g.setColor(Color.RED);
         super.render(g);
     }
 

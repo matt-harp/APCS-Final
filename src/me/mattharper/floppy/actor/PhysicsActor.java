@@ -42,7 +42,7 @@ public abstract class PhysicsActor extends Actor {
         return velocity;
     }
 
-    protected void setVelocity(Vector2 velocity) {
+    public void setVelocity(Vector2 velocity) {
         double dx = velocity.x - this.velocity.x;
         double dy = velocity.y - this.velocity.y;
         applyImpulse(new Vector2(dx*mass, dy*mass));

@@ -70,7 +70,7 @@ public class World {
                     resolveCollision(actor, other, result);
                     result.otherActor = other;
                     actor.onCollision(result);
-                    result.otherActor = actor; //todo hack
+                    result.otherActor = actor;
                     other.onCollision(result);
                     already.add(new AbstractMap.SimpleEntry<>(actor, other));
                 }
@@ -79,13 +79,24 @@ public class World {
     }
 
     private void resolveCollision(PhysicsActor a, PhysicsActor b, CollisionResult result) {
-        Vector2 rv = b.getVelocity().copy().subtract(a.getVelocity());
-        double normalVelocity = rv.dotProduct(result.normal);
-        if(normalVelocity > 0) return;
+      if(a instanceof Pointer || b instanceof Pointer) return;
+        // Vector2 rv = b.getVelocity().copy().subtract(a.getVelocity());
+        // double normalVelocity = rv.dotProduct(result.normal);
+        // if(normalVelocity > 0) return;
         float e = Math.min(a.restitution, b.restitution);
-        double j = -(1+e) * normalVelocity;
-        j /= (1/a.getMass()) + (1/b.getMass());
+        // double j = -(1+e) * normalVelocity;
+        // j /= (1/a.getMass()) + (1/b.getMass());
 //        Vector2 impulse = result.normal.copy().multiply(j*2);
+        double cx = (a.getMass() * a.getVelocity().x) + (b.getMass() * b.getVelocity().x);
+        double cx2 = (a.getMass() * b.getVelocity().x) - (a.getMass() * a.getVelocity().x);
+        double bxf = (cx - cx2) / (a.getMass() + b.getMass());
+        double axf = b.getVelocity().x - bxf - a.getVelocity().x;
+        double cy = (a.getMass() * a.getVelocity().y) + (b.getMass() * b.getVelocity().y);
+        double cy2 = (a.getMass() * b.getVelocity().y) - (a.getMass() * a.getVelocity().y);
+        double byf = (cy - cy2) / (a.getMass() + b.getMass());
+        double ayf = b.getVelocity().y - byf - a.getVelocity().y;
+        // a.setVelocity(new Vector2(axf, ayf));
+        // b.setVelocity(new Vector2(bxf, byf));
         Vector2 impulse = result.normal.copy().multiply(a.getMass() * a.getVelocity().magnitude());
         b.applyImpulse(impulse);
         impulse.multiply(-1);

@@ -3,13 +3,13 @@ package me.mattharper.floppy.game;
 import me.mattharper.floppy.graphics.GraphicsContext;
 import me.mattharper.floppy.input.Input;
 import me.mattharper.floppy.util.FrameListener;
-import me.mattharper.floppy.util.Vector2;
 import me.mattharper.floppy.util.Time;
+import me.mattharper.floppy.util.Vector2;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameView extends JPanel {
@@ -20,7 +20,7 @@ public class GameView extends JPanel {
     private final Vector2 cameraOffset = new Vector2();
     private final Input input;
     private World currentWorld;
-    public static List<FrameListener> endOfFrame = new LinkedList<>();
+    public static List<FrameListener> endOfFrame = new ArrayList<>(); // [Rubric A] static array
     public GameView() {
         instance = this;
         setDoubleBuffered(true);
@@ -56,6 +56,8 @@ public class GameView extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         GraphicsContext context = new GraphicsContext(g);
+        context.height = getHeight();
+        context.width = getWidth();
         g.drawString("DeltaSeconds: " + Time.deltaSeconds, 10, 10);
         g.drawString("FPS: " + (int)(1 / Time.deltaSeconds), 10, 40);
         currentWorld.render(context);

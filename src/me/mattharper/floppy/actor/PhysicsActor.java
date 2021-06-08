@@ -24,8 +24,10 @@ public abstract class PhysicsActor extends Actor {
     @Override
     public void update() {
         super.update();
-        if(isKinematic)
+        if (isKinematic)
             position.add(velocity.copy().multiply(Time.deltaSeconds));
+        else
+            velocity = new Vector2();
     }
 
     public void applyForce(Vector2 force) {
@@ -45,7 +47,7 @@ public abstract class PhysicsActor extends Actor {
     public void setVelocity(Vector2 velocity) {
         double dx = velocity.x - this.velocity.x;
         double dy = velocity.y - this.velocity.y;
-        applyImpulse(new Vector2(dx*mass, dy*mass));
+        applyImpulse(new Vector2(dx * mass, dy * mass));
     }
 
     public boolean canCollide() {
@@ -55,6 +57,8 @@ public abstract class PhysicsActor extends Actor {
     public boolean canCollideWith(PhysicsActor other) {
         return true;
     }
+
+    public boolean overlapOnly(PhysicsActor other) { return false; }
 
     public abstract void onCollision(CollisionResult collision);
 
@@ -67,7 +71,7 @@ public abstract class PhysicsActor extends Actor {
     }
 
     public CollisionShape getCollision() {
-      return collision;
+        return collision;
     }
 
     public String toString() {

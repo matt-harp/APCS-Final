@@ -6,10 +6,10 @@ import me.mattharper.floppy.physics.CollisionResult;
 import me.mattharper.floppy.util.Vector2;
 
 import java.awt.*;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.AbstractMap;
 
 public class World {
     private final List<Actor> actors = new ArrayList<>(); // [Rubric A] ArrayList
@@ -19,10 +19,11 @@ public class World {
         spawn(new Pointer(this));
         spawn(new CameraController(this));
         spawn(new DebugLog(this));
-        spawn(new Box(this, new Vector2(0, 20), new Vector2(-3, -3), new Vector2(3, 3)));
-        spawn(new Box(this, new Vector2(0, -10), new Vector2(-300, -300), new Vector2(300, 0)));
-        spawn(new BouncyBox(this, new Vector2(0, 10), new Vector2(-3, -3), new Vector2(3, 3)));
-        spawn(new BouncyBox(this, new Vector2(0, 0), new Vector2(-3, -3), new Vector2(3, 3)));
+        spawn(new GameManager(this));
+        spawn(new Box(this, new Vector2(0, 0), new Vector2(-100, -100), new Vector2(100, -90)));
+        spawn(new Box(this, new Vector2(0, 0), new Vector2(-100, -100), new Vector2(-90, 100)));
+        spawn(new Box(this, new Vector2(0, 0), new Vector2(-100, 90), new Vector2(100, 100)));
+        spawn(new Box(this, new Vector2(0, 0), new Vector2(90, -100), new Vector2(100, 100)));
 
         for (Actor actor : actors) {
             actor.init();
@@ -31,11 +32,15 @@ public class World {
     }
 
     public void spawn(Actor actor) {
-        actors.add(actor); // [Rubric A] add method (ArrayList)
+        GameView.endOfFrame.add(() -> {
+            actors.add(actor); // [Rubric A] add method (ArrayList)
+        });
     }
 
-    public boolean destroy(Actor actor) {
-        return actors.remove(actor); // [Rubric A] remove method (ArrayList)
+    public void destroy(Actor actor) {
+        GameView.endOfFrame.add(() -> {
+            actors.remove(actor); // [Rubric A] remove method (ArrayList)
+        });
     }
 
     public void update() {
@@ -58,12 +63,10 @@ public class World {
     public void resolveCollisions() {
         List<Map.Entry<PhysicsActor, PhysicsActor>> already = new ArrayList<>();
         for (PhysicsActor actor : getPhysicsActors()) {
-            //todo if(!actor.collides()) continue;
-            //todo broad phase bounding checks
             for (PhysicsActor other : getPhysicsActors()) { // [Rubric B] nested for loop
                 if (actor == other) continue;
-                if(already.stream().anyMatch(p -> (p.getKey() == actor && p.getValue() == other) || (p.getKey() == other && p.getValue() == actor))) continue;
-                //todo if(!other.collides()) continue;
+                if (already.stream().anyMatch(p -> (p.getKey() == actor && p.getValue() == other) || (p.getKey() == other && p.getValue() == actor)))
+                    continue;
                 if (!actor.canCollideWith(other)) continue;
                 CollisionResult result = actor.getCollision().testCollision(other.getCollision(), other.getPosition().copy().subtract(actor.getPosition()));
                 if (result.collision) {
@@ -79,33 +82,20 @@ public class World {
     }
 
     private void resolveCollision(PhysicsActor a, PhysicsActor b, CollisionResult result) {
-      if(a instanceof Pointer || b instanceof Pointer) return;
-        // Vector2 rv = b.getVelocity().copy().subtract(a.getVelocity());
-        // double normalVelocity = rv.dotProduct(result.normal);
-        // if(normalVelocity > 0) return;
-        float e = Math.min(a.restitution, b.restitution);
-        // double j = -(1+e) * normalVelocity;
-        // j /= (1/a.getMass()) + (1/b.getMass());
-//        Vector2 impulse = result.normal.copy().multiply(j*2);
-        double cx = (a.getMass() * a.getVelocity().x) + (b.getMass() * b.getVelocity().x);
-        double cx2 = (a.getMass() * b.getVelocity().x) - (a.getMass() * a.getVelocity().x);
-        double bxf = (cx - cx2) / (a.getMass() + b.getMass());
-        double axf = b.getVelocity().x - bxf - a.getVelocity().x;
-        double cy = (a.getMass() * a.getVelocity().y) + (b.getMass() * b.getVelocity().y);
-        double cy2 = (a.getMass() * b.getVelocity().y) - (a.getMass() * a.getVelocity().y);
-        double byf = (cy - cy2) / (a.getMass() + b.getMass());
-        double ayf = b.getVelocity().y - byf - a.getVelocity().y;
-        // a.setVelocity(new Vector2(axf, ayf));
-        // b.setVelocity(new Vector2(bxf, byf));
-        Vector2 impulse = result.normal.copy().multiply(a.getMass() * a.getVelocity().magnitude());
-        b.applyImpulse(impulse);
-        impulse.multiply(-1);
-        a.applyImpulse(impulse);
+        if(a.overlapOnly(b) || b.overlapOnly(a)) return;
+
+        double e = Math.min(a.restitution, b.restitution);
+        Vector2 ab = a.getVelocity().copy().subtract(b.getVelocity());
+        double J = -(1+e)*ab.dotProduct(result.normal);
+        J /= (1 / a.getMass() + 1 / b.getMass());
+        a.applyImpulse(result.normal.copy().multiply(J));
+        b.applyImpulse(result.normal.copy().multiply(-J));
 
         // correct interpenetration of objects
-        if(b.isKinematic)
+        if (b.isKinematic)
             b.getPosition().add(result.normal.copy().multiply(result.penetration));
-
+        if(a.isKinematic)
+            a.getPosition().add(result.normal.copy().multiply(-1).multiply(result.penetration));
     }
 
     private List<PhysicsActor> getPhysicsActors() { // [Rubric B] helper method

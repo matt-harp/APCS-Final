@@ -13,8 +13,8 @@ public class Box extends PhysicsActor {
         this.collision = new Rectangle(minExtent, maxExtent);
         this.hasGravity = false;
         this.isKinematic = false;
-        this.mass = 1000;
-        this.restitution = 0.1f;
+        this.mass = 10000000;
+        this.restitution = 0.94f;
     }
 
     @Override
@@ -26,7 +26,6 @@ public class Box extends PhysicsActor {
     public void render(GraphicsContext g) {
         super.render(g);
         g.fillRect(position.copy().add(((Rectangle) collision).getMin()), position.copy().add(((Rectangle) collision).getMax()));
-        g.drawPoint(position);
     }
 
     @Override

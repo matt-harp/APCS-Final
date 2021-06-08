@@ -18,7 +18,7 @@ public class CircularBuffer<T> implements Iterable<T> {
 
     public void push(T element) {
         buffer[position++] = element;
-        if(position > buffer.length-1) position = 0;
+        if(position > buffer.length-1) position = 0; // [Rubric A] length field
     }
 
     @Override

@@ -18,7 +18,6 @@ public class Rectangle implements CollisionShape {
         else if (other instanceof Point) {
             return testPoint((Point) other, relativeTo);
         }
-        //todo
         return new CollisionResult();
     }
 

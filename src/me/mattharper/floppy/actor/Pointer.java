@@ -7,7 +7,6 @@ import me.mattharper.floppy.input.Input;
 import me.mattharper.floppy.input.InputBind;
 import me.mattharper.floppy.physics.CollisionResult;
 import me.mattharper.floppy.physics.Point;
-import me.mattharper.floppy.physics.SpringConstraint;
 import me.mattharper.floppy.util.Vector2;
 
 import java.awt.*;
@@ -49,18 +48,14 @@ public class Pointer extends PhysicsActor {
     }
 
     @Override
+    public boolean overlapOnly(PhysicsActor other) {
+        return true;
+    }
+
+    @Override
     public void onCollision(CollisionResult collision) {
         if(Input.isInputHeld(InputBind.MOUSE_LEFT) && draggedActor == null) {
             draggedActor = collision.otherActor;
-        }
-        if(Input.isInputJustReleased(InputBind.MOUSE_RIGHT)) {
-            if(selectedActor == null) {
-                selectedActor = collision.otherActor;
-            }
-            else if (selectedActor != collision.otherActor) {
-                new SpringConstraint(selectedActor, collision.otherActor);
-                selectedActor = null;
-            }
         }
     }
 }

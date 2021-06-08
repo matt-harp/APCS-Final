@@ -7,6 +7,8 @@ import java.awt.*;
 
 public class GraphicsContext {
     private final Graphics2D g2d;
+    public int height;
+    public int width;
     public GraphicsContext(Graphics g) {
         g2d = (Graphics2D) g;
     }
@@ -57,6 +59,16 @@ public class GraphicsContext {
         g2d.drawString(string, (int)position.x, (int)position.y);
     }
 
+    public void drawRect(Vector2 min, Vector2 max) {
+        Vector2 minScreen = GameView.worldToScreen(min);
+        Vector2 maxScreen = GameView.worldToScreen(max);
+        int minX = (int) Math.min(minScreen.x, maxScreen.x);
+        int minY = (int) Math.min(minScreen.y, maxScreen.y);
+        int maxX = (int) Math.max(minScreen.x, maxScreen.x);
+        int maxY = (int) Math.max(minScreen.y, maxScreen.y);
+        g2d.drawRect(minX, minY, maxX-minX, maxY-minY);
+    }
+
     public void fillRect(Vector2 min, Vector2 max) {
         Vector2 minScreen = GameView.worldToScreen(min);
         Vector2 maxScreen = GameView.worldToScreen(max);
@@ -64,6 +76,14 @@ public class GraphicsContext {
         int minY = (int) Math.min(minScreen.y, maxScreen.y);
         int maxX = (int) Math.max(minScreen.x, maxScreen.x);
         int maxY = (int) Math.max(minScreen.y, maxScreen.y);
+        g2d.fillRect(minX, minY, maxX-minX, maxY-minY);
+    }
+
+    public void fillRectScreen(Vector2 min, Vector2 max) {
+        int minX = (int) Math.min(min.x, max.x);
+        int minY = (int) Math.min(min.y, max.y);
+        int maxX = (int) Math.max(min.x, max.x);
+        int maxY = (int) Math.max(min.y, max.y);
         g2d.fillRect(minX, minY, maxX-minX, maxY-minY);
     }
 
